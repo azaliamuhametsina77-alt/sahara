@@ -1,203 +1,142 @@
-/* Africa scroll map for Tilda. Container in T123: <div id="africa-scroll-nav"></div> */
-#africa-scroll-nav,
-#africa-scroll-nav * {
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-#africa-scroll-nav {
-  --af-text: #212121;
-  --af-muted: rgba(33, 33, 33, 0.62);
-  --af-base-fill: rgba(33, 33, 33, 0.09);
-  --af-base-stroke: rgba(33, 33, 33, 0.22);
-  --af-dim-fill: rgba(33, 33, 33, 0.035);
-  --af-ssa-fill: rgba(217, 150, 150, 0.34);
-  --af-ssa-stroke: rgba(160, 90, 90, 0.40);
-  --af-project-fill: rgba(217, 150, 150, 0.92);
-  --af-project-hover: rgba(205, 125, 125, 0.98);
-  --af-project-stroke: rgba(120, 62, 62, 0.72);
-  position: relative;
-  min-height: 300vh;
-  width: 100%;
-  background: transparent;
-  font-family: Montserrat, Arial, sans-serif;
-  color: var(--af-text);
-}
-
-#africa-scroll-nav .af-map-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(230px, 350px) minmax(320px, 1fr);
-  align-items: center;
-  gap: clamp(12px, 3vw, 48px);
-  padding: clamp(18px, 4vw, 56px);
-  overflow: hidden;
-  background: transparent;
-}
-
-#africa-scroll-nav .af-map-copy {
-  min-height: 160px;
-  display: flex;
-  align-items: center;
-}
-
-#africa-scroll-nav .af-map-copy__text {
-  display: none;
-  max-width: 340px;
-  margin: 0;
-  padding: 16px 18px;
-  border-left: 3px solid #d99696;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.76);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(33, 33, 33, 0.80);
-}
-
-#africa-scroll-nav.is-stage-1 .af-map-copy__text--ssa,
-#africa-scroll-nav.is-stage-2 .af-map-copy__text--project {
-  display: block;
-}
-
-#africa-scroll-nav .af-map-canvas {
-  width: 100%;
-  height: min(88vh, 820px);
-  min-height: 520px;
-  position: relative;
-}
-
-#africa-scroll-nav .af-map-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
-
-#africa-scroll-nav .af-country {
-  fill: var(--af-base-fill);
-  stroke: var(--af-base-stroke);
-  stroke-width: 0.75;
-  vector-effect: non-scaling-stroke;
-  transition: fill 420ms ease, stroke 420ms ease, opacity 420ms ease, transform 200ms ease;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-#africa-scroll-nav.is-stage-1 .af-country {
-  fill: var(--af-dim-fill);
-  opacity: 0.36;
-}
-
-#africa-scroll-nav.is-stage-1 .af-country.is-ssa {
-  fill: var(--af-ssa-fill);
-  stroke: var(--af-ssa-stroke);
-  opacity: 1;
-}
-
-#africa-scroll-nav.is-stage-2 .af-country {
-  fill: var(--af-dim-fill);
-  opacity: 0.23;
-}
-
-#africa-scroll-nav.is-stage-2 .af-country.is-project {
-  fill: var(--af-project-fill);
-  stroke: var(--af-project-stroke);
-  opacity: 1;
-  cursor: pointer;
-}
-
-#africa-scroll-nav.is-stage-2 .af-country.is-project:hover {
-  fill: var(--af-project-hover);
-  transform: scale(1.015);
-}
-
-#africa-scroll-nav .af-label {
-  font-family: Montserrat, Arial, sans-serif;
-  font-size: 9.5px;
-  font-weight: 500;
-  line-height: 1;
-  text-anchor: middle;
-  dominant-baseline: middle;
-  fill: rgba(33, 33, 33, 0.50);
-  paint-order: stroke;
-  stroke: rgba(255, 255, 255, 0.84);
-  stroke-width: 3px;
-  stroke-linejoin: round;
-  pointer-events: none;
-  transition: opacity 420ms ease, fill 420ms ease, font-size 420ms ease;
-}
-
-#africa-scroll-nav.is-stage-1 .af-label {
-  opacity: 0.28;
-}
-
-#africa-scroll-nav.is-stage-1 .af-label.is-ssa {
-  opacity: 0.82;
-  fill: rgba(33, 33, 33, 0.66);
-}
-
-#africa-scroll-nav.is-stage-2 .af-label {
-  opacity: 0.14;
-}
-
-#africa-scroll-nav.is-stage-2 .af-label.is-project {
-  opacity: 1;
-  fill: rgba(33, 33, 33, 0.86);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-#africa-scroll-nav .af-map-error {
-  max-width: 620px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid rgba(215, 28, 28, 0.35);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.85);
-  color: #212121;
-  font: 15px/1.5 Montserrat, Arial, sans-serif;
-}
-
-@media (max-width: 820px) {
-  #africa-scroll-nav {
-    min-height: 320vh;
+#africa-scroll-nav.af-scroll-map {
+    --base-fill: rgba(33, 33, 33, .10);
+    --base-stroke: rgba(33, 33, 33, .24);
+    --muted-fill: rgba(33, 33, 33, .045);
+    --ssa-fill: rgba(217, 150, 150, .24);
+    --ssa-stroke: rgba(160, 90, 90, .42);
+    --project-fill: rgba(217, 150, 150, .86);
+    --project-fill-hover: #C77F7F;
+    --project-stroke: rgba(160, 90, 90, .78);
+    position: relative;
+    height: 330vh;
+    background: transparent;
+    font-family: Montserrat, Arial, sans-serif;
   }
 
-  #africa-scroll-nav .af-map-sticky {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    padding: 18px 14px;
-    gap: 8px;
+  #africa-scroll-nav * { box-sizing: border-box; }
+
+  #africa-scroll-nav .af-scroll-map__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent;
   }
 
-  #africa-scroll-nav .af-map-copy {
-    order: 2;
-    min-height: 0;
+  #africa-scroll-nav .af-scroll-map__svg {
+    width: min(92vw, 760px);
+    height: min(92vh, 760px);
+    display: block;
+    overflow: visible;
   }
 
-  #africa-scroll-nav .af-map-copy__text {
-    max-width: none;
-    width: 100%;
-    font-size: 13px;
-    padding: 12px 14px;
-    background: rgba(255, 255, 255, 0.84);
+  #africa-scroll-nav .af-country {
+    fill: var(--base-fill);
+    stroke: var(--base-stroke);
+    stroke-width: .75;
+    vector-effect: non-scaling-stroke;
+    transition: fill .55s ease, stroke .55s ease, opacity .55s ease, transform .22s ease;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
-  #africa-scroll-nav .af-map-canvas {
-    order: 1;
-    height: 66vh;
-    min-height: 380px;
+  #africa-scroll-nav.is-ssa .af-country {
+    fill: var(--muted-fill);
+    opacity: .42;
   }
 
-  #africa-scroll-nav .af-label {
-    font-size: 7.5px;
-    stroke-width: 2.4px;
+  #africa-scroll-nav.is-ssa .af-country.is-ssa {
+    fill: var(--ssa-fill);
+    stroke: var(--ssa-stroke);
+    opacity: 1;
   }
 
-  #africa-scroll-nav.is-stage-2 .af-label.is-project {
-    font-size: 10px;
+  #africa-scroll-nav.is-project .af-country {
+    fill: var(--muted-fill);
+    opacity: .26;
   }
-}
+
+  #africa-scroll-nav.is-project .af-country.is-project {
+    fill: var(--project-fill);
+    stroke: var(--project-stroke);
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  #africa-scroll-nav.is-project .af-country.is-project:hover {
+    fill: var(--project-fill-hover);
+    transform: scale(1.018);
+  }
+
+  #africa-scroll-nav .af-scroll-map__caption {
+    position: absolute;
+    left: clamp(18px, 6vw, 82px);
+    top: 50%;
+    width: min(330px, 34vw);
+    padding: 0;
+    color: rgba(33, 33, 33, .86);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.48;
+    opacity: 0;
+    transform: translateY(-50%) translateX(-8px);
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+  }
+
+  #africa-scroll-nav.is-ssa .af-scroll-map__caption,
+  #africa-scroll-nav.is-project .af-scroll-map__caption {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  #africa-scroll-nav .af-scroll-map__eyebrow {
+    margin-bottom: 8px;
+    color: #D71C1C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  #africa-scroll-nav .af-scroll-map__text {
+    font-weight: 500;
+  }
+
+  #africa-scroll-nav .af-scroll-map__selected {
+    margin-top: 12px;
+    color: rgba(33, 33, 33, .60);
+    font-size: 14px;
+    line-height: 1.42;
+  }
+
+  #africa-scroll-nav .af-scroll-map__caption-project { display: none; }
+  #africa-scroll-nav.is-project .af-scroll-map__caption-ssa { display: none; }
+  #africa-scroll-nav.is-project .af-scroll-map__caption-project { display: block; }
+
+  #africa-scroll-nav .af-scroll-map__step { height: 0; pointer-events: none; }
+
+  @media (max-width: 700px) {
+    #africa-scroll-nav.af-scroll-map { height: 330vh; }
+    #africa-scroll-nav .af-scroll-map__svg { width: 96vw; height: auto; }
+    #africa-scroll-nav .af-scroll-map__caption {
+      left: 18px;
+      right: 18px;
+      top: auto;
+      bottom: 18px;
+      width: auto;
+      max-width: none;
+      font-size: 13px;
+      transform: translateY(8px);
+    }
+    #africa-scroll-nav.is-ssa .af-scroll-map__caption,
+    #africa-scroll-nav.is-project .af-scroll-map__caption {
+      transform: translateY(0);
+    }
+    #africa-scroll-nav .af-scroll-map__selected { font-size: 12px; }
+  }
