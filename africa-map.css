@@ -121,24 +121,6 @@
 
   #africa-scroll-nav .af-scroll-map__step { height: 0; pointer-events: none; }
 
-
-  #africa-scroll-nav .af-scroll-map__sahel-text { display: none; }
-  #africa-scroll-nav.is-sahel-hover .af-scroll-map__default-text { display: none; }
-  #africa-scroll-nav.is-sahel-hover .af-scroll-map__sahel-text { display: block; }
-
-  #africa-scroll-nav.is-project.is-sahel-hover .af-country.is-project {
-    fill: var(--muted-fill);
-    opacity: .22;
-  }
-
-  #africa-scroll-nav.is-project.is-sahel-hover .af-country.is-sahel {
-    fill: var(--project-fill-hover);
-    stroke: var(--project-stroke);
-    opacity: 1;
-    transform: scale(1.014);
-  }
-
-
   @media (max-width: 700px) {
     #africa-scroll-nav.af-scroll-map { height: 330vh; }
     #africa-scroll-nav .af-scroll-map__svg { width: 96vw; height: auto; }
@@ -158,3 +140,21 @@
     }
     #africa-scroll-nav .af-scroll-map__selected { font-size: 12px; }
   }
+
+
+/* Sahel hover group */
+#africa-scroll-nav .af-scroll-map__sahel-text { display: none; }
+#africa-scroll-nav.is-sahel-hover .af-scroll-map__default-text { display: none; }
+#africa-scroll-nav.is-sahel-hover .af-scroll-map__sahel-text { display: block; }
+
+#africa-scroll-nav.is-project.is-sahel-hover .af-country.is-project {
+  fill: var(--muted-fill);
+  opacity: .22;
+}
+
+#africa-scroll-nav.is-project.is-sahel-hover .af-country.is-sahel {
+  fill: var(--project-fill-hover);
+  stroke: var(--project-stroke);
+  opacity: 1;
+  transform: scale(1.014);
+}

@@ -3,14 +3,28 @@
   const baseUrl = new URL('.', currentScript.src).href;
   const mount = document.getElementById('africa-map-loader') || document.getElementById('africa-scroll-nav');
 
+  function showError(message) {
+    if (!mount) return;
+    mount.innerHTML = '<div style="font-family:Montserrat,Arial,sans-serif;padding:24px;border:1px solid #d99696;color:#212121;background:rgba(217,150,150,.12);border-radius:14px;">Карта не загрузилась: ' + message + '</div>';
+  }
+
   if (!mount) {
     console.warn('[Africa map] Не найден контейнер #africa-map-loader или #africa-scroll-nav');
     return;
   }
 
-  fetch(baseUrl + 'africa-map.html', { cache: 'no-store' })
+  // CSS подключается автоматически, чтобы в Tilda было меньше мест для ошибки.
+  if (!document.querySelector('link[data-africa-map-css]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = baseUrl + 'africa-map.css?v=' + Date.now();
+    link.setAttribute('data-africa-map-css', '1');
+    document.head.appendChild(link);
+  }
+
+  fetch(baseUrl + 'africa-map.html?v=' + Date.now(), { cache: 'no-store' })
     .then(response => {
-      if (!response.ok) throw new Error('Не удалось загрузить africa-map.html');
+      if (!response.ok) throw new Error('не удалось загрузить africa-map.html, статус ' + response.status);
       return response.text();
     })
     .then(html => {
@@ -19,13 +33,17 @@
     })
     .catch(error => {
       console.error('[Africa map]', error);
+      showError(error.message || String(error));
     });
 
   function initAfricaScrollMap() {
     const root = document.getElementById('africa-scroll-nav');
-    if (!root) return;
+    if (!root) {
+      showError('в africa-map.html не найден #africa-scroll-nav');
+      return;
+    }
 
-    const selectedText = root.querySelector('.af-scroll-map__selected');
+    const selectedText = root.querySelector('.af-scroll-map__default-text .af-scroll-map__selected');
 
     function setStage(stage) {
       root.classList.toggle('is-ssa', stage === 1);
@@ -68,13 +86,10 @@
         return;
       }
 
-      // Fallback для Tilda: если блок ещё не найден JS-ом, меняем hash.
-      // Tilda обычно умеет прокручивать к собственным #rec-блокам по hash.
       console.warn('[Africa map] JS не нашёл блок, пробую переход через hash:', selector);
       window.location.hash = id;
     }
 
-    // Делегирование на document: работает даже после fetch-подгрузки HTML.
     document.addEventListener('click', function (event) {
       const country = event.target.closest && event.target.closest('#africa-scroll-nav .af-country.is-project');
       if (!country) return;
