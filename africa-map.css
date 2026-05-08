@@ -75,14 +75,14 @@
 
   #africa-scroll-nav .af-scroll-map__caption {
     position: absolute;
-    left: clamp(18px, 6vw, 82px);
+    left: clamp(42px, 9vw, 140px);
     top: 50%;
-    width: min(330px, 34vw);
+    width: min(430px, 38vw);
     padding: 0;
     color: rgba(33, 33, 33, .86);
     font-family: 'Montserrat', Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.48;
+    font-size: 20px;
+    line-height: 1.5;
     opacity: 0;
     transform: translateY(-50%) translateX(-8px);
     transition: opacity .4s ease, transform .4s ease;
@@ -111,8 +111,8 @@
   #africa-scroll-nav .af-scroll-map__selected {
     margin-top: 12px;
     color: rgba(33, 33, 33, .60);
-    font-size: 14px;
-    line-height: 1.42;
+    font-size: 16px;
+    line-height: 1.45;
   }
 
   #africa-scroll-nav .af-scroll-map__caption-project { display: none; }
