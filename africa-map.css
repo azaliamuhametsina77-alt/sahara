@@ -158,3 +158,33 @@
   opacity: 1;
   transform: scale(1.014);
 }
+
+/* v-scroll-hint: initial instruction before the region text appears */
+#africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+#africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption > * {
+  display: none;
+}
+
+#africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
+  content: "Продолжайте листать";
+  display: block;
+  color: rgba(33, 33, 33, .86);
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption {
+    transform: translateY(0);
+  }
+
+  #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
+    font-size: 13px;
+  }
+}
