@@ -128,7 +128,7 @@
 
       root.classList.remove('is-sahel-hover');
       if (selectedText) {
-        selectedText.textContent = 'Наведите курсор на страну или нажмите на неё, чтобы перейти к разделу.';
+        selectedText.textContent = 'Наведите курсор на страну или нажмите на нее, чтобы перейти к конкретному разделу. Либо продолжайте листать дальше.';
       }
     });
   }
