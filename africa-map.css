@@ -13,29 +13,81 @@
     height: 330vh;
     background: transparent;
     font-family: Montserrat, Arial, sans-serif;
-  }
+}
 
-  #africa-scroll-nav * { box-sizing: border-box; }
+#africa-scroll-nav * { box-sizing: border-box; }
 
-  #africa-scroll-nav .af-scroll-map__sticky {
+/* Sticky-контейнер – теперь с gap, чтобы задать фиксированный зазор между текстом и картой */
+#africa-scroll-nav .af-scroll-map__sticky {
     position: sticky;
     top: 0;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 40px;                     /* ← измените значение на нужное вам расстояние */
     overflow: hidden;
     background: transparent;
-  }
+}
 
-  #africa-scroll-nav .af-scroll-map__svg {
+#africa-scroll-nav .af-scroll-map__svg {
     width: min(92vw, 760px);
     height: min(92vh, 760px);
     display: block;
     overflow: visible;
-  }
+    flex-shrink: 0;               /* чтобы карта не сжималась */
+}
 
-  #africa-scroll-nav .af-country {
+/* Текстовый блок – больше не absolute, участвует в flex-потоке */
+#africa-scroll-nav .af-scroll-map__caption {
+    position: static;
+    width: min(430px, 38vw);
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    color: rgba(33, 33, 33, .86);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity .4s ease;    /* убрали transform, теперь только прозрачность */
+    pointer-events: none;
+}
+
+/* Состояния видимости */
+#africa-scroll-nav.is-ssa .af-scroll-map__caption,
+#africa-scroll-nav.is-project .af-scroll-map__caption {
+    opacity: 1;
+}
+
+#africa-scroll-nav .af-scroll-map__eyebrow {
+    margin-bottom: 8px;
+    color: #D71C1C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+#africa-scroll-nav .af-scroll-map__text {
+    font-weight: 500;
+}
+
+#africa-scroll-nav .af-scroll-map__selected {
+    margin-top: 12px;
+    color: rgba(33, 33, 33, .60);
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+#africa-scroll-nav .af-scroll-map__caption-project { display: none; }
+#africa-scroll-nav.is-project .af-scroll-map__caption-ssa { display: none; }
+#africa-scroll-nav.is-project .af-scroll-map__caption-project { display: block; }
+
+#africa-scroll-nav .af-scroll-map__step { height: 0; pointer-events: none; }
+
+/* Карта */
+#africa-scroll-nav .af-country {
     fill: var(--base-fill);
     stroke: var(--base-stroke);
     stroke-width: .75;
@@ -43,148 +95,93 @@
     transition: fill .55s ease, stroke .55s ease, opacity .55s ease, transform .22s ease;
     transform-box: fill-box;
     transform-origin: center;
-  }
+}
 
-  #africa-scroll-nav.is-ssa .af-country {
+#africa-scroll-nav.is-ssa .af-country {
     fill: var(--muted-fill);
     opacity: .42;
-  }
+}
 
-  #africa-scroll-nav.is-ssa .af-country.is-ssa {
+#africa-scroll-nav.is-ssa .af-country.is-ssa {
     fill: var(--ssa-fill);
     stroke: var(--ssa-stroke);
     opacity: 1;
-  }
+}
 
-  #africa-scroll-nav.is-project .af-country {
+#africa-scroll-nav.is-project .af-country {
     fill: var(--muted-fill);
     opacity: .26;
-  }
+}
 
-  #africa-scroll-nav.is-project .af-country.is-project {
+#africa-scroll-nav.is-project .af-country.is-project {
     fill: var(--project-fill);
     stroke: var(--project-stroke);
     opacity: 1;
     cursor: pointer;
-  }
+}
 
-  #africa-scroll-nav.is-project .af-country.is-project:hover {
+#africa-scroll-nav.is-project .af-country.is-project:hover {
     fill: var(--project-fill-hover);
     transform: scale(1.018);
-  }
+}
 
-  #africa-scroll-nav .af-scroll-map__caption {
-    position: absolute;
-    left: clamp(42px, 9vw, 140px);
-    top: 50%;
-    width: min(430px, 38vw);
-    padding: 0;
-    color: rgba(33, 33, 33, .86);
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-size: 20px;
-    line-height: 1.5;
-    opacity: 0;
-    transform: translateY(-50%) translateX(-8px);
-    transition: opacity .4s ease, transform .4s ease;
-    pointer-events: none;
-  }
-
-  #africa-scroll-nav.is-ssa .af-scroll-map__caption,
-  #africa-scroll-nav.is-project .af-scroll-map__caption {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-  }
-
-  #africa-scroll-nav .af-scroll-map__eyebrow {
-    margin-bottom: 8px;
-    color: #D71C1C;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  #africa-scroll-nav .af-scroll-map__text {
-    font-weight: 500;
-  }
-
-  #africa-scroll-nav .af-scroll-map__selected {
-    margin-top: 12px;
-    color: rgba(33, 33, 33, .60);
-    font-size: 16px;
-    line-height: 1.45;
-  }
-
-  #africa-scroll-nav .af-scroll-map__caption-project { display: none; }
-  #africa-scroll-nav.is-project .af-scroll-map__caption-ssa { display: none; }
-  #africa-scroll-nav.is-project .af-scroll-map__caption-project { display: block; }
-
-  #africa-scroll-nav .af-scroll-map__step { height: 0; pointer-events: none; }
-
-  @media (max-width: 700px) {
-    #africa-scroll-nav.af-scroll-map { height: 330vh; }
-    #africa-scroll-nav .af-scroll-map__svg { width: 96vw; height: auto; }
-    #africa-scroll-nav .af-scroll-map__caption {
-      left: 18px;
-      right: 18px;
-      top: auto;
-      bottom: 18px;
-      width: auto;
-      max-width: none;
-      font-size: 13px;
-      transform: translateY(8px);
-    }
-    #africa-scroll-nav.is-ssa .af-scroll-map__caption,
-    #africa-scroll-nav.is-project .af-scroll-map__caption {
-      transform: translateY(0);
-    }
-    #africa-scroll-nav .af-scroll-map__selected { font-size: 12px; }
-  }
-
-
-/* Sahel hover group */
+/* Sahel hover */
 #africa-scroll-nav .af-scroll-map__sahel-text { display: none; }
 #africa-scroll-nav.is-sahel-hover .af-scroll-map__default-text { display: none; }
 #africa-scroll-nav.is-sahel-hover .af-scroll-map__sahel-text { display: block; }
 
 #africa-scroll-nav.is-project.is-sahel-hover .af-country.is-project {
-  fill: var(--muted-fill);
-  opacity: .22;
+    fill: var(--muted-fill);
+    opacity: .22;
 }
 
 #africa-scroll-nav.is-project.is-sahel-hover .af-country.is-sahel {
-  fill: var(--project-fill-hover);
-  stroke: var(--project-stroke);
-  opacity: 1;
-  transform: scale(1.014);
+    fill: var(--project-fill-hover);
+    stroke: var(--project-stroke);
+    opacity: 1;
+    transform: scale(1.014);
 }
 
-/* v-scroll-hint: initial instruction before the region text appears */
+/* Начальное состояние: текст "Продолжайте листать..." */
 #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
+    opacity: 1;
 }
-
 #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption > * {
-  display: none;
+    display: none;
 }
-
 #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
-  content: "Продолжайте листать...";
-  display: block;
-  color: rgba(33, 33, 33, .86);
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-size: 20px;
-  line-height: 1.5;
-  font-weight: 500;
+    content: "Продолжайте листать...";
+    display: block;
+    color: rgba(33, 33, 33, .86);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 500;
 }
 
+/* Мобильная версия */
 @media (max-width: 700px) {
-  #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption {
-    transform: translateY(0);
-  }
-
-  #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
-    font-size: 13px;
-  }
+    #africa-scroll-nav.af-scroll-map {
+        height: 330vh;
+    }
+    #africa-scroll-nav .af-scroll-map__sticky {
+        flex-direction: column;
+        gap: 12px;               /* зазор между картой и текстом на мобильных */
+    }
+    #africa-scroll-nav .af-scroll-map__svg {
+        width: 96vw;
+        height: auto;
+    }
+    #africa-scroll-nav .af-scroll-map__caption {
+        width: auto;
+        max-width: none;
+        font-size: 13px;
+        order: 1;               /* текст после карты */
+    }
+    #africa-scroll-nav .af-scroll-map__selected {
+        font-size: 12px;
+    }
+    #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
+        font-size: 13px;
+    }
 }
