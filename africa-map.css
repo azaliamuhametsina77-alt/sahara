@@ -17,7 +17,7 @@
 
 #africa-scroll-nav * { box-sizing: border-box; }
 
-/* Sticky-контейнер – теперь с gap, чтобы задать фиксированный зазор между текстом и картой */
+/* Sticky-контейнер с зазором */
 #africa-scroll-nav .af-scroll-map__sticky {
     position: sticky;
     top: 0;
@@ -25,7 +25,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;                     /* ← измените значение на нужное вам расстояние */
+    gap: 40px;                     /* ← расстояние между текстом и картой */
     overflow: hidden;
     background: transparent;
 }
@@ -35,10 +35,11 @@
     height: min(92vh, 760px);
     display: block;
     overflow: visible;
-    flex-shrink: 0;               /* чтобы карта не сжималась */
+    flex-shrink: 0;
+    order: 0;                     /* карта будет справа (второй элемент визуально) */
 }
 
-/* Текстовый блок – больше не absolute, участвует в flex-потоке */
+/* Текстовый блок – теперь слева благодаря order: -1 */
 #africa-scroll-nav .af-scroll-map__caption {
     position: static;
     width: min(430px, 38vw);
@@ -50,8 +51,9 @@
     font-size: 20px;
     line-height: 1.5;
     opacity: 0;
-    transition: opacity .4s ease;    /* убрали transform, теперь только прозрачность */
+    transition: opacity .4s ease;
     pointer-events: none;
+    order: -1;                    /* ← это переносит текст влево */
 }
 
 /* Состояния видимости */
@@ -166,17 +168,18 @@
     }
     #africa-scroll-nav .af-scroll-map__sticky {
         flex-direction: column;
-        gap: 12px;               /* зазор между картой и текстом на мобильных */
+        gap: 12px;
     }
     #africa-scroll-nav .af-scroll-map__svg {
         width: 96vw;
         height: auto;
+        order: 0;                /* на мобильных карта будет первой (сверху) */
     }
     #africa-scroll-nav .af-scroll-map__caption {
         width: auto;
         max-width: none;
         font-size: 13px;
-        order: 1;               /* текст после карты */
+        order: 1;               /* текст снизу */
     }
     #africa-scroll-nav .af-scroll-map__selected {
         font-size: 12px;
