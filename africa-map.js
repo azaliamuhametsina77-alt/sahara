@@ -37,40 +37,110 @@
     });
 
   function initAfricaScrollMap() {
-  const root = document.getElementById('africa-scroll-nav');
-  if (!root) {
-    showError('в africa-map.html не найден #africa-scroll-nav');
-    return;
-  }
+    const root = document.getElementById('africa-scroll-nav');
+    if (!root) {
+      showError('в africa-map.html не найден #africa-scroll-nav');
+      return;
+    }
 
-  const isMobile = () => window.innerWidth <= 980;
+    const isMobile = () => window.innerWidth <= 980;
 
-  // ---------- Общие элементы ----------
-  const selectedText = root.querySelector('.af-scroll-map__default-text .af-scroll-map__selected');
-  const stageButtons = root.querySelectorAll('.af-scroll-map__stage-btn');
+    // ---------- Десктопная логика (ТВОЙ ИСХОДНЫЙ КОД) ----------
+    if (!isMobile()) {
+      const selectedText = root.querySelector('.af-scroll-map__default-text .af-scroll-map__selected');
 
-  // ---------- Десктопная логика (без изменений) ----------
-  function setStageDesktop(stage) {
-    root.classList.toggle('is-ssa', stage === 1);
-    root.classList.toggle('is-project', stage === 2);
-  }
+      function setStage(stage) {
+        root.classList.toggle('is-ssa', stage === 1);
+        root.classList.toggle('is-project', stage === 2);
+      }
 
-  function updateStageByScroll() {
-    if (isMobile()) return;
-    const rect = root.getBoundingClientRect();
-    const scrollable = Math.max(1, root.offsetHeight - window.innerHeight);
-    const passed = Math.min(Math.max(-rect.top, 0), scrollable);
-    const progress = passed / scrollable;
+      function updateStageByScroll() {
+        const rect = root.getBoundingClientRect();
+        const scrollable = Math.max(1, root.offsetHeight - window.innerHeight);
+        const passed = Math.min(Math.max(-rect.top, 0), scrollable);
+        const progress = passed / scrollable;
 
-    if (progress < 0.30) setStageDesktop(0);
-    else if (progress < 0.62) setStageDesktop(1);
-    else setStageDesktop(2);
-  }
+        if (progress < 0.30) setStage(0);
+        else if (progress < 0.62) setStage(1);
+        else setStage(2);
+      }
 
-  // ---------- Мобильная логика (свайп + клик) ----------
-  function initMobile() {
-    window.removeEventListener('scroll', updateStageByScroll);
-    window.removeEventListener('resize', updateStageByScroll);
+      updateStageByScroll();
+      window.addEventListener('scroll', updateStageByScroll, { passive: true });
+      window.addEventListener('resize', updateStageByScroll);
+
+      function findTarget(selector) {
+        if (!selector) return null;
+        const id = selector.charAt(0) === '#' ? selector.slice(1) : selector;
+        return document.getElementById(id) || document.querySelector(selector);
+      }
+
+      function scrollToTarget(selector) {
+        if (!selector || selector === '#rec') {
+          console.warn('[Africa map] У страны не указан настоящий data-target:', selector);
+          return;
+        }
+        const id = selector.charAt(0) === '#' ? selector.slice(1) : selector;
+        const target = findTarget(selector);
+        if (target) {
+          const y = target.getBoundingClientRect().top + window.pageYOffset - 20;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+          return;
+        }
+        console.warn('[Africa map] JS не нашёл блок, пробую переход через hash:', selector);
+        window.location.hash = id;
+      }
+
+      document.addEventListener('click', function (event) {
+        const country = event.target.closest && event.target.closest('#africa-scroll-nav .af-country.is-project');
+        if (!country) return;
+        event.preventDefault();
+        event.stopPropagation();
+        scrollToTarget(country.getAttribute('data-target'));
+      }, true);
+
+      function isSahelCountry(country) {
+        return country && country.classList.contains('is-sahel');
+      }
+
+      root.addEventListener('mouseover', function (event) {
+        const country = event.target.closest && event.target.closest('.af-country.is-project');
+        if (!country) return;
+
+        if (isSahelCountry(country)) {
+          root.classList.add('is-sahel-hover');
+          return;
+        }
+
+        root.classList.remove('is-sahel-hover');
+        if (selectedText) {
+          selectedText.textContent = (country.dataset.name || '') + ' — нажмите, чтобы перейти к конкретномуразделу.';
+        }
+      });
+
+      root.addEventListener('mouseout', function (event) {
+        const country = event.target.closest && event.target.closest('.af-country.is-project');
+        if (!country) return;
+
+        const related = event.relatedTarget;
+        if (related && related.closest && related.closest('.af-country.is-sahel') && isSahelCountry(country)) {
+          return;
+        }
+
+        root.classList.remove('is-sahel-hover');
+        if (selectedText) {
+          selectedText.textContent = 'Наведите курсор на страну или нажмите на нее, чтобы перейти к конкретному разделу. Либо продолжайте листать дальше.';
+        }
+      });
+
+      return; // ← ВАЖНО: чтобы не сработала мобильная инициализация
+    }
+
+    // ---------- Мобильная логика (свайп + клик) ----------
+    const stageButtons = root.querySelectorAll('.af-scroll-map__stage-btn');
+
+    window.removeEventListener('scroll', () => {}); // на всякий случай
+    window.removeEventListener('resize', () => {});
     root.classList.remove('is-sahel-hover');
 
     const caption = root.querySelector('.af-scroll-map__caption');
@@ -179,63 +249,8 @@
       }
     });
 
+    // Стартовое состояние: без подсветки (этап 0)
     setStageMobile(0);
   }
-
-  // ---------- Выбор режима ----------
-  if (isMobile()) {
-    initMobile();
-  } else {
-    updateStageByScroll();
-    window.addEventListener('scroll', updateStageByScroll, { passive: true });
-    window.addEventListener('resize', updateStageByScroll);
-
-    function isSahelCountry(country) {
-      return country && country.classList.contains('is-sahel');
-    }
-
-    root.addEventListener('mouseover', function (event) {
-      const country = event.target.closest && event.target.closest('.af-country.is-project');
-      if (!country) return;
-      if (isSahelCountry(country)) {
-        root.classList.add('is-sahel-hover');
-        return;
-      }
-      root.classList.remove('is-sahel-hover');
-      if (selectedText) {
-        selectedText.textContent = (country.dataset.name || '') + ' — нажмите, чтобы перейти к конкретному разделу.';
-      }
-    });
-
-    root.addEventListener('mouseout', function (event) {
-      const country = event.target.closest && event.target.closest('.af-country.is-project');
-      if (!country) return;
-      const related = event.relatedTarget;
-      if (related && related.closest && related.closest('.af-country.is-sahel') && isSahelCountry(country)) {
-        return;
-      }
-      root.classList.remove('is-sahel-hover');
-      if (selectedText) {
-        selectedText.textContent = 'Наведите курсор на страну или нажмите на нее, чтобы перейти к конкретному разделу. Либо продолжайте листать дальше.';
-      }
-    });
-
-    document.addEventListener('click', function (event) {
-      const country = event.target.closest && event.target.closest('#africa-scroll-nav .af-country.is-project');
-      if (!country) return;
-      event.preventDefault();
-      event.stopPropagation();
-      const targetSelector = country.getAttribute('data-target');
-      if (targetSelector && targetSelector !== '#rec') {
-        const target = document.querySelector(targetSelector);
-        if (target) {
-          const y = target.getBoundingClientRect().top + window.pageYOffset - 20;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        } else {
-          window.location.hash = targetSelector.slice(1);
-        }
-      }
-    }, true);
-  }
 }
-})();
+)();

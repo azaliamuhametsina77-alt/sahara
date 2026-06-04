@@ -164,7 +164,7 @@
 /* ========== Мобильная версия ========== */
 @media (max-width: 980px) {
   #africa-scroll-nav.af-scroll-map {
-    height: auto;                 /* не 330vh, чтобы не мешать прокрутке */
+    height: auto;
   }
 
   .af-scroll-map__sticky {
@@ -181,7 +181,7 @@
     width: 100%;
     max-width: 400px;
     height: auto;
-    touch-action: pan-y;          /* позволяет вертикальный скролл страницы */
+    touch-action: pan-y;
     order: 0;
   }
 
@@ -189,18 +189,19 @@
     width: 100% !important;
     max-width: 400px;
     order: 1;
-    pointer-events: auto;        /* включаем взаимодействие для свайпа */
+    pointer-events: auto;
     opacity: 1 !important;
-    touch-action: pan-y;
+    touch-action: pan-y;          /* разрешаем вертикальный скролл */
     display: block !important;
+    /* убираем возможный position: absolute/sticky от десктопа */
+    position: static !important;
   }
 
-  /* Убираем скролл-ступени */
   .af-scroll-map__step {
     display: none;
   }
 
-  /* Кнопки этапов */
+  /* Кнопки этапов — показываем только на мобильных */
   .af-scroll-map__stages-nav {
     display: flex;
     flex-wrap: wrap;
@@ -242,9 +243,15 @@
     z-index: 100;
   }
 
-  /* Скрываем начальный псевдоэлемент "Продолжайте листать..." на мобильных,
-     чтобы не мешал (текст управляется JS) */
+  /* Скрываем начальный псевдоэлемент "Продолжайте листать..." */
   #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
     content: none;
+  }
+}
+
+/* Скрываем кнопки этапов на десктопе (ширина > 980px) */
+@media (min-width: 981px) {
+  .af-scroll-map__stages-nav {
+    display: none !important;
   }
 }
