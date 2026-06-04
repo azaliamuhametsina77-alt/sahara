@@ -76,15 +76,8 @@
               <div class="af-scroll-map__selected">Альянс государств Сахеля был создан в сентябре 2023 года. Официально его целью является обеспечение коллективной обороны Буркина-Фасо, Мали и&nbsp;Нигера.</div>
             </div>
           </div>
-
-          <div class="af-scroll-map__stages-nav" aria-label="Выберите регион">
-            <button class="af-scroll-map__stage-btn active" data-stage="0">Африка южнее Сахары</button>
-            <button class="af-scroll-map__stage-btn" data-stage="1">Сахель</button>
-            <button class="af-scroll-map__stage-btn" data-stage="2">Страны проекта</button>
-  </div>
-  <!-- ↑↑↑ КОНЕЦ ВСТАВКИ ↑↑↑ -->
-
 </aside>
+        </aside>
       </div>
 
       <div class="af-scroll-map__step" data-stage="0"></div>
@@ -93,4 +86,9 @@
     </section>
 
 <style>
+@media (max-width: 980px) {
+    #africa-scroll-nav {
+        display: none !important;
+    }
+}
 </style>
