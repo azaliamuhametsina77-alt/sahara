@@ -114,7 +114,7 @@
 
       root.classList.remove('is-sahel-hover');
       if (selectedText) {
-        selectedText.textContent = (country.dataset.name || '') + ' — нажмите, чтобы перейти к конкретномуразделу.';
+        selectedText.textContent = (country.dataset.name || '') + ' — нажмите, чтобы перейти к\u00A0конкретному разделу.';
       }
     });
 
@@ -129,7 +129,7 @@
 
       root.classList.remove('is-sahel-hover');
       if (selectedText) {
-        selectedText.textContent = 'Наведите курсор на страну или нажмите на нее, чтобы перейти к конкретному разделу. Либо продолжайте листать дальше.';
+        selectedText.textContent = 'Наведите курсор на\u00A0страну или нажмите на нее, чтобы перейти к\u00A0конкретному разделу. Либо продолжайте листать дальше.';
       }
     });
 
