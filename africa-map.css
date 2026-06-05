@@ -162,6 +162,7 @@
 }
 
 /* ========== Мобильная версия ========== */
+/* ========== Мобильная версия ========== */
 @media (max-width: 980px) {
   #africa-scroll-nav.af-scroll-map {
     height: auto;
@@ -172,86 +173,110 @@
     top: auto !important;
     height: auto !important;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;          /* текст слева, карта справа */
+    align-items: flex-start;
+    justify-content: center;
     gap: 20px;
+    flex-wrap: wrap;
   }
 
   .af-scroll-map__svg {
-    width: 100%;
+    width: 50%;
     max-width: 400px;
     height: auto;
     touch-action: pan-y;
-    order: 0;
+    order: 2;                    /* карта справа */
   }
 
   .af-scroll-map__caption {
-    width: 100% !important;
+    width: 50%;
     max-width: 400px;
-    order: 1;
-    pointer-events: auto;
+    order: 1;                    /* текст слева */
+    pointer-events: auto !important;
     opacity: 1 !important;
-    touch-action: pan-y;          /* разрешаем вертикальный скролл */
-    display: block !important;
-    /* убираем возможный position: absolute/sticky от десктопа */
     position: static !important;
+    touch-action: pan-y;
+    display: block !important;
+    font-size: 16px;
+    line-height: 1.4;
   }
 
   .af-scroll-map__step {
     display: none;
   }
 
-  /* Кнопки этапов — показываем только на мобильных */
-  .af-scroll-map__stages-nav {
+  /* Убираем десктопные переключения видимости — всё показываем через мобильную логику */
+  .af-scroll-map__caption-ssa,
+  .af-scroll-map__caption-project,
+  .af-scroll-map__default-text,
+  .af-scroll-map__sahel-text {
+    display: block !important;
+  }
+
+  /* Скрываем всё, кроме мобильного блока, по умолчанию */
+  .af-scroll-map__caption-ssa,
+  .af-scroll-map__caption-project {
+    display: none !important;
+  }
+
+  /* Мобильный информационный блок */
+  .af-scroll-map__mobile-info {
+    display: block;
+  }
+
+  .af-scroll-map__country-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .af-scroll-map__country-desc {
+    margin-bottom: 12px;
+    color: rgba(33, 33, 33, .86);
+  }
+
+  .af-scroll-map__confirm-text {
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .af-scroll-map__confirm-buttons {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
+    gap: 12px;
   }
 
-  .af-scroll-map__stage-btn {
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 8px 16px;
+  .af-scroll-map__yes-btn {
+    background: #D71C1C;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
     font-family: Montserrat, Arial, sans-serif;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 16px;
     cursor: pointer;
-    transition: 0.2s;
-    -webkit-tap-highlight-color: transparent;
+    transition: background .2s;
   }
 
-  .af-scroll-map__stage-btn.active {
-    background: #2c3e50;
-    color: #fff;
-    border-color: #2c3e50;
+  .af-scroll-map__yes-btn:hover {
+    background: #b01818;
   }
 
-  /* Подсказка при клике на страну */
-  .af-country-tooltip {
-    position: absolute;
-    background: rgba(0,0,0,0.85);
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-family: Montserrat, Arial, sans-serif;
-    pointer-events: none;
-    transform: translate(-50%, -100%);
-    white-space: nowrap;
-    z-index: 100;
+  /* Подсветка стран — всегда показываем проектные страны */
+  #africa-scroll-nav .af-country {
+    fill: rgba(33, 33, 33, .045);
+    opacity: .26;
   }
-
-  /* Скрываем начальный псевдоэлемент "Продолжайте листать..." */
-  #africa-scroll-nav:not(.is-ssa):not(.is-project) .af-scroll-map__caption::before {
-    content: none;
+  #africa-scroll-nav .af-country.is-project {
+    fill: rgba(217, 150, 150, .86);
+    stroke: rgba(160, 90, 90, .78);
+    opacity: 1;
   }
 }
 
-/* Скрываем кнопки этапов на десктопе (ширина > 980px) */
+/* На десктопе скрываем мобильный блок и возвращаем стандартное поведение */
 @media (min-width: 981px) {
-  .af-scroll-map__stages-nav {
+  .af-scroll-map__mobile-info {
     display: none !important;
   }
 }
